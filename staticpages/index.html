@@ -1,0 +1,431 @@
+    
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title> view toys</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+       
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+        
+            body {
+                margin: 0;
+            }
+                
+            
+            .header {
+                background-color:#4f0e29;
+                padding: 30px;
+                text-align: center;
+            }
+    
+            /* Style the top navigation bar */
+            .topnav {
+                overflow: hidden;
+                background-color:#a59eb8;
+            }
+    
+            /* Style the topnav links */
+            .topnav a {
+                float: left;
+                display: block;
+                color: #4f1809;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+            
+            /* Change color on hover */
+            .topnav a:hover {
+                background-color: #ad133a;
+                color: black;
+            }
+            
+             /* h2 settings */
+             h1 {
+                color:#f00c3a;
+                text-align: center;
+            }
+            /* h2 settings */
+            h2 {
+                text-align: center;
+            }
+    
+            /* Three unequal columns */
+            .column {
+                float: left;
+                padding: 10px;
+            }
+    
+            .left, .right {
+                width: 20%;
+            }
+    
+            .middle {
+                width: 60%;
+            }
+    
+            /* Clear floats after the columns */
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+    
+            /* try responsive layout - helps when samaller screens */
+            @media screen and (max-width: 600px) {
+            .column {
+                width: 100%;
+                }
+            }
+    
+            
+    
+           
+            .footer {
+                background-color: blue;
+                padding: 10px;
+                text-align: center;
+            }
+        </style>
+    
+    <title>Santa's WorkShop</title>
+    
+    </head>
+    <body>
+        <div class="header">
+            <h1>Santa's Workshop!</h1>
+            
+            <img src="christmas-elf.jpg" alt="Sleepy elf" style="width:800px;height:200px;">
+            </div>    
+    
+            <div class="topnav">
+                <a href="dispatches.html">View Dispatches</a>
+                <a href="#">Link2</a>
+                <a href="#">Link3</a>
+                <a href="#">Link4</a>
+                <a href="#">Go</a>
+    
+            </div>
+
+      
+
+
+        <h2>Toys</h2>
+        <div> <button id="showCreateButton" onclick="showCreate()">Create</button></div>
+        <div>
+            <table class="table" id="toysTable">
+                <tr>
+                        <th>Toy Name</th>
+                        <th>Toy Maker</th>
+                        <th>Model Number</th>
+                        <th>Colour</th>
+                        <th>Quantity</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                </tr>
+                
+            </table>
+        </div>
+        <div id='createUpdateForm' style="display: none">
+                <form>
+                <h2><span id="createLabel">Create </span> <span id="updateLabel">update</span>a toy</h2>
+                <input type="hidden" name="id"/>
+                Name <input type="text" name="name" required /><br/>
+                Maker <input type="text" name="maker" required/> <br/>
+                Model <input type="text" name="model" required/> <br/>
+                Colour <input type="text" name="colour"/> <br/>
+                quantity <input type="number" name="quantity" required/> <br/>
+                <input type="hidden" name="hasdispatches"/><br/>
+               
+                <input id="doCreateButton" type="submit" onclick="doCreate()"/>
+                <span><button id="doUpdateButton" type ="button" class="btn btn-primary" onclick="doUpdate()">Update</button></span>
+                <span><button id="goBackButton" class="btn btn-warning" onclick="goBack()">Go Back</button></span>
+                </form>
+        </div>
+    </body>
+    <script>
+    function showCreate(){
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('toysTable').style.display="none"
+        document.getElementById('createUpdateForm').style.display="block"
+
+        document.getElementById('createLabel').style.display="inline"
+        document.getElementById('updateLabel').style.display="none"
+
+        document.getElementById('doCreateButton').style.display="block"
+        document.getElementById('doUpdateButton').style.display="none"
+
+    }
+    function showViewAll(){
+        document.getElementById('showCreateButton').style.display="block"
+        document.getElementById('toysTable').style.display="block"
+        document.getElementById('createUpdateForm').style.display="none"
+    }
+    function showUpdate(buttonElement){
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('toysTable').style.display="none"
+        document.getElementById('createUpdateForm').style.display="block"
+
+        document.getElementById('createLabel').style.display="none"
+        document.getElementById('updateLabel').style.display="inline"
+
+        document.getElementById('doCreateButton').style.display="none"
+        document.getElementById('doUpdateButton').style.display="block"
+
+
+        var rowElement = buttonElement.parentNode.parentNode
+        // these is a way of finding the closest <tr> which would safer, closest()
+        
+        var toys = gettoysFromRow(rowElement)
+        
+        console.log(JSON.stringify(toys))
+        populateFormWithtoys(toys)
+    }
+    function doCreate(){
+        
+        var form = document.getElementById('createUpdateForm')
+
+        var toys = {}
+       
+        toys.name = form.querySelector('input[name="name"]').value
+        toys.maker = form.querySelector('input[name="maker"]').value
+        toys.model = form.querySelector('input[name="model"]').value
+        toys.colour = form.querySelector('input[name="colour"]').value
+        toys.quantity = form.querySelector('input[name="quantity"]').value
+        console.log(JSON.stringify(toys));
+        createtoysAjax(toys);
+        
+        
+    }
+
+    function doUpdate(){
+        var toys = gettoysFromForm();
+        console.log("toys from doupdate her fi: ",toys)
+        var rowElement = document.getElementById(toys.id);
+        updatetoysAjax(toys);
+        settoysInRow(rowElement,toys);
+       
+        clearForm();
+        showViewAll();
+    }
+    function goBack(){
+       
+        clearForm();
+        showViewAll();
+    }
+
+    function doDelete(r){
+        var tableElement = document.getElementById('toysTable');
+        var rowElement = r.parentNode.parentNode;
+        var index = rowElement.rowIndex;
+        var toyid = rowElement.getAttribute("id");
+        var toyname = rowElement.cells[1].firstChild.textContent;
+        deletetoysAjax(toyid);
+        tableElement.deleteRow(index);
+    
+            
+
+    }
+
+    
+    function addtoysToTable(toys){
+        console.log("toys in addtoystoTable",toys)
+        var tableElement = document.getElementById('toysTable')
+        var rowElement = tableElement.insertRow(-1)
+        rowElement.setAttribute('id',toys.id)
+        var cell1 = rowElement.insertCell(0);
+        cell1.innerHTML = toys.id
+        cell1.style.display = "none";
+        var cell2 = rowElement.insertCell(1);
+        cell2.innerHTML = toys.name
+        var cell3 = rowElement.insertCell(2);
+        cell3.innerHTML = toys.maker
+        var cell4 = rowElement.insertCell(3);
+        cell4.innerHTML = toys.model
+        var cell4 = rowElement.insertCell(4);
+        cell4.innerHTML = toys.colour
+        var cell4 = rowElement.insertCell(5);
+        cell4.innerHTML = toys.quantity
+        var cell5 = rowElement.insertCell(6);
+        cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+        var cell6 = rowElement.insertCell(7);
+        if (toys.hasdispatches == "No"){
+            console.log("no dipsatches so can delete", toys.hasdispatches);
+            cell6.innerHTML = '<button onclick="doDelete(this)">delete</button>'
+        }
+        else if (toys.hasdispatches != "No"){
+            cell6.innerHTML = "Toy dispatched so toy cannot be deleted"
+        }
+        var cell7 = rowElement.insertCell(8);
+        cell7.innerHTML = toys.hasdispatches
+        cell7.style.display = "none";
+    }
+
+ 
+
+    function clearForm(){
+        var form = document.getElementById('createUpdateForm')
+
+        form.querySelector('input[name="name"]').value=''
+        form.querySelector('input[name="maker"]').value=''
+        form.querySelector('input[name="model"]').value=''
+        form.querySelector('input[name="colour"]').value=''
+        form.querySelector('input[name="quantity"]').value=''
+    }
+    function gettoysFromRow(rowElement){
+        var toys ={}
+        toys.id  = rowElement.getAttribute('id')
+        toys.name = rowElement.cells[1].firstChild.textContent
+        toys.maker = rowElement.cells[2].firstChild.textContent
+        toys.model = rowElement.cells[3].firstChild.textContent
+        toys.colour = rowElement.cells[4].firstChild.textContent
+        toys.quantity = rowElement.cells[5].firstChild.textContent
+        toys.hasdispatches = rowElement.cells[8].firstChild.textContent
+        console.log("gettoysFrom Row being logged", toys)
+        return toys
+    }
+    function settoysInRow(rowElement, toys){
+        console.log("whene is settoysinrow used")
+        rowElement.cells[0].firstChild.textContent= toys.id  
+        rowElement.cells[1].firstChild.textContent= toys.name
+        rowElement.cells[2].firstChild.textContent= toys.maker
+        rowElement.cells[3].firstChild.textContent= toys.model
+        rowElement.cells[4].firstChild.textContent= toys.colour
+        rowElement.cells[5].firstChild.textContent= toys.quantity
+    }
+    function populateFormWithtoys(toys){
+        var form = document.getElementById('createUpdateForm')
+        form.querySelector('input[name="id"]').disabled = true
+        form.querySelector('input[name="name"]').readOnly = true;
+        form.querySelector('input[name="id"]').value  = toys.id
+        console.log("insidepopulate form fi", toys);
+        if (toys.hasdispatches == "Yes"){
+            alert("This toy has dispatches so you can only update quantity");
+            form.querySelector('input[name="maker"]').readOnly = true;
+            form.querySelector('input[name="model"]').readOnly = true;
+            form.querySelector('input[name="colour"]').readOnly = true;
+        }
+        else if (toys.hasdispatches == "No") {
+            form.querySelector('input[name="maker"]').readOnly = false;
+            form.querySelector('input[name="model"]').readOnly = false;
+            form.querySelector('input[name="colour"]').readOnly = false;
+        }
+        form.querySelector('input[name="name"]').value= toys.name
+        
+        form.querySelector('input[name="maker"]').value= toys.maker
+        form.querySelector('input[name="model"]').value= toys.model
+        form.querySelector('input[name="colour"]').value= toys.colour
+        form.querySelector('input[name="quantity"]').value= toys.quantity
+            
+        return toys
+    }
+    function gettoysFromForm(){
+
+        var form = document.getElementById('createUpdateForm')
+        var toys = {}
+        toys.id = form.querySelector('input[name="id"]').value
+        toys.name = form.querySelector('input[name="name"]').value
+        toys.maker = form.querySelector('input[name="maker"]').value
+        toys.model = form.querySelector('input[name="model"]').value
+        toys.colour = form.querySelector('input[name="colour"]').value
+        toys.quantity = form.querySelector('input[name="quantity"]').value
+        console.log("from gettoysFromForm", JSON.stringify(toys))
+        return toys
+    }
+
+    host = window.location.origin
+    function getAllAjax(){
+        $.ajax({
+            // "url": "http://127.0.0.1:5000/toys",
+            "url": host+"/toys",
+            "method":"GET",
+            "data":"",
+            "dataType": "JSON",
+            "success":function(result){
+                //console.log(result);
+                for (toys of result){
+                    console.log(result)
+                    console.log(toys)
+                    addtoysToTable(toys);
+                }
+                
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+
+    }
+    function createtoysAjax(toys){
+        
+        console.log(JSON.stringify(toys));
+        $.ajax({
+            // "url": "http://127.0.0.1:5000/toys",
+            "url": host+"/toys",
+            "method":"POST",
+            "data":JSON.stringify(toys),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+                toys.id = result.id
+                // addtoysToTable(toys)
+                // clearForm()
+                // showViewAll()
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+    function updatetoysAjax(toys){
+        //var car = {"reg":"12 D 1234","quantity":8000}
+        console.log("udpatetoysajax", JSON.stringify(toys));
+        $.ajax({
+            // "url": "http://127.0.0.1:5000/toys/"+encodeURI(toys.id),
+            "url": host+"/toys/"+encodeURI(toys.id),
+            "method":"PUT",
+            "data":JSON.stringify(toys),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+               // console.log(result);
+                  
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+    function deletetoysAjax(id){
+        
+        //console.log(JSON.stringify('deleting '+id));
+        $.ajax({
+            // "url": "http://127.0.0.1:5000/toys/"+encodeURI(id),
+            "url": host+"/toys/"+encodeURI(id),
+            "method":"DELETE",
+            "data":"",
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+                console.log(result);
+                return result;
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+
+
+    window.onload(getAllAjax());
+  
+
+    
+    </script>
+</html>
+

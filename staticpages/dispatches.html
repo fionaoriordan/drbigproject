@@ -1,0 +1,420 @@
+<!DOCTYPE html>    
+<html>
+    <head>
+        <title> view dispatches</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+       
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <meta charset = "UTF-8" />
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+        
+            body {
+                margin: 8;
+            }
+                
+            
+            .header {
+                background-color:#4f0e29;
+                padding: 30px;
+                text-align: center;
+            }
+    
+            /* Style the top navigation bar */
+            .topnav {
+                overflow: hidden;
+                background-color:#a59eb8;
+            }
+    
+            /* Style the topnav links */
+            .topnav a {
+                float: left;
+                display: block;
+                color: #4f1809;
+                text-align: center;
+                padding: 16px 20px;
+                text-decoration: none;
+            }
+            
+            /* Change color on hover */
+            .topnav a:hover {
+                background-color: #ad133a;
+                color: black;
+            }
+            
+             /* h2 settings */
+             h1 {
+                color:#f00c3a;
+                text-align: center;
+            }
+            /* h2 settings */
+            h2 {
+                text-align: center;
+            }
+    
+            /* Three unequal columns */
+            .column {
+                float: left;
+                padding: 10px;
+            }
+    
+            .left, .right {
+                width: 20%;
+            }
+    
+            .middle {
+                width: 60%;
+            }
+    
+            /* Clear floats after the columns */
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+    
+            /* try responsive layout - helps when samaller screens */
+            @media screen and (max-width: 600px) {
+            .column {
+                width: 100%;
+                }
+            }
+    
+            
+    
+           
+            .footer {
+                background-color: blue;
+                padding: 10px;
+                text-align: center;
+            }
+        </style>
+    
+    <title>North Pole Dispatch Department</title>
+    
+    </head>
+    <body>
+        <div class="header">
+            <h1>Santa's Workshop!</h1>
+            
+            <img src="christmas-elf.jpg" alt="Sleepy elf" style="width:800px;height:200px;"  >
+            <!-- -->
+            </div>    
+    
+            <div class="topnav">
+                <a href="dispatches.html">View Dispatches</a>
+                <a href="index.html">View Toys</a>
+                <a href="#">Link3</a>
+                <a href="#">Link4</a>
+                
+    
+            </div>
+
+        
+        <!-- <div class="header">
+            <h1>North Pole Dispatch Department</h1>
+            <img src="images/XXXX.jpg" alt="Santa Pic" style="width:300px;height:155px;"> 
+        </div>   -->
+
+
+        <!-- <h1>Dispatches</h1> -->
+        <div id= "ViewDispatches">
+            <div> <button id="showCreateButton" class="btn btn-link" onclick="showCreate()">Create a New Dispatch</button></div>
+                <div>
+                    <table class="table table-hover" id="dispatchesTable">
+                    <tr>
+                        <th>dispatch_id</th>
+                        <th>name</th>
+                        <th>address</th>
+                        <th>toyname</th>
+                    </tr>
+                    </table>
+                </div>
+            </div>
+        </div>  
+        <form>
+        <div id='createUpdateForm2' style="display: none">
+            <span id="createheader"><h2>Create a dispatch<h2></h2></span>
+            <br/>
+            <br/>
+            
+            <input type="hidden" name="dispatch_id"/>
+            Name <input id = "inputnameid" type="text" name="name" required/><br/>
+            Address <input type="text" name="address" required/> <br/>
+            <label for="toyname">Choose a Toy</label>
+         
+]
+            <select id="selecttoyname" name="toyname">
+                <!-- <option value="Ball">Ball</option>
+                <option value="Fire Engine 1">Fire Engine 1</option>
+                <option value="Rory Bear22">Rory Bear22</option>
+                <option value="Rory Bear77">Rory Bear77</option> -->
+            </select>
+            <br/>
+
+            <input id="doCreateButton" type="submit" onclick="doCreateDispatches()"/>
+
+            <span><button id="goBackButton"  class="btn btn-warning" onclick="goBack()">Go Back</button></span>
+            </form>
+            
+        </div>
+        <div id = "welldone" style= "display: none"><p>Well done! Dispatch Created</p></div>
+    </body>
+    <script>
+
+    function showCreate(){
+        
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('dispatchesTable').style.display="none"
+        document.getElementById('createUpdateForm2').style.display="block"
+        getAllToyNamesAjax();
+        
+        document.getElementById('welldone').style.display="none";
+        document.getElementById('createheader').style.display="inline"
+        document.getElementById('doCreateButton').style.display="block"
+    
+
+    }
+
+    function alertwelldone(){
+        alert("Well you dispatched a Toy!!");
+    }
+
+    function showWellDone(){
+        console.log("IM in WEll Done");
+        alertwelldone();
+        document.getElementById('createUpdateForm2').style.display="none";
+        document.getElementById('welldone').style.display="block"
+        document.getElementById('createheader').style.display="none"
+        document.getElementById('dispatchesTable').style.display="none"
+        
+        document.getElementById('doCreateButton').style.display="none"
+
+
+    }
+
+    function showViewAll(){
+        
+        document.getElementById('showCreateButton').style.display="block"
+        document.getElementById('dispatchesTable').style.display="block"
+        document.getElementById('createUpdateForm2').style.display="none"
+        document.getElementById('welldone').style.display="none";
+    }
+    function showUpdate(buttonElement){
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('dispatchesTable').style.display="none"
+        document.getElementById('createUpdateForm2').style.display="block"
+
+        document.getElementById('createLabel').style.display="none"
+        document.getElementById('updateLabel').style.display="inline"
+
+        document.getElementById('doCreateButton').style.display="none"
+        document.getElementById('doUpdateButton').style.display="block"
+
+
+        var rowElement = buttonElement.parentNode.parentNode
+        // these is a way of finding the closest <tr> which would safer, closest()
+        
+        var dispatches = getdispatchesFromRow(rowElement)
+        console.log(JSON.stringify(dispatches))
+        populateFormWithdispatches(dispatches)
+    }
+    
+    function doCreateDispatches(){
+        var form = document.getElementById('createUpdateForm2');
+
+        var dispatches = {}
+       
+        dispatches.name = form.querySelector('input[name="name"]').value
+        dispatches.address = form.querySelector('input[name="address"]').value
+        dispatches.toyname = form.querySelector('select[name="toyname"]').value
+        
+        console.log(JSON.stringify(dispatches));
+        createdispatchesAjax(dispatches);
+    
+    }
+
+  
+
+    function goBack(){
+       
+        showViewAll();
+    }
+
+
+    
+    function adddispatchesToTable(dispatches){
+        var tableElement = document.getElementById('dispatchesTable');
+        console.log("inside adddispatches totalbe");
+        var rowElement = tableElement.insertRow(-1);
+        rowElement.setAttribute('id', dispatches.dispatch_id);
+        var cell1 = rowElement.insertCell(0);
+        cell1.innerHTML = dispatches.dispatch_id;
+
+        var cell2 = rowElement.insertCell(1);
+        cell2.innerHTML = dispatches.name
+
+        var cell3 = rowElement.insertCell(2);
+        cell3.innerHTML = dispatches.address
+
+        var cell4 = rowElement.insertCell(3);
+        cell4.innerHTML = dispatches.toyname;
+
+    }
+
+
+    // function addoptions(){
+    //     var SELECT = document.getElementById('selecttoyname');
+    //     console.log("inside addoptions")
+    //     var OPT1 = document.createElement('OPTION');
+    //     OPT1.setAttribute('value', "Bingo");
+    //     OPT1.appendChild( document.createTextNode( 'option1' ) );
+    //     SELECT.appendChild(OPT1);
+
+    // }
+
+    function addoptions(toynames){
+        // https://stackoverflow.com/questions/14473207/how-can-i-give-an-array-as-options-to-select-element
+    
+        for (var i = 0; i < toynames.length; i++) {
+            var select = document.getElementById("selecttoyname");
+            var option = document.createElement("option");
+            option.text = toynames[i].toyname;
+            option.value = toynames[i].toyname;
+            select.add(option);
+}
+    }
+
+  
+    function populateFormWithdispatches(dispatches){
+        console.log("inside populate form with dispatches")
+        console.log(dispatches)
+        var form = document.getElementById('createUpdateForm2')
+        form.querySelector('input[name="dispatch_id"]').disabled = true
+        form.querySelector('input[name="dispatch_id"]').value  = dispatches.dispatch_id
+        form.querySelector('input[name="name"]').value= dispatches.name
+        form.querySelector('input[name="address"]').value= dispatches.address
+        form.querySelector('input[name="toyname"]').value= dispatches.toyname
+        return dispatches
+    }
+    // function getdispatchesFromForm(){
+    //     var form = document.getElementById('createUpdateForm2')
+    //     var dispatches = {}
+    //     dispatches.dispatch_id = form.querySelector('input[name="dispatch_id"]').value
+    //     dispatches.name = form.querySelector('input[name="name"]').value
+    //     dispatches.address = form.querySelector('input[name="address"]').value
+    //     dispatches.address = form.querySelector('input[name="toyname"]').value
+    //     console.log(JSON.stringify(dispatches))
+    //     return dispatches
+    // }
+ 
+    host = window.location.origin
+    
+    function getAllDispatchesAjax(){
+        console.log("Inside getAllDispatchesAjax");
+        $.ajax({
+            // "url": "http://127.0.0.1:5000/dispatches",
+            "url": host+"/dispatches",
+            "method":"GET",
+            "data":"",
+            "dataType": "JSON",
+            "success":function(result){
+                
+                for (dispatches of result){
+                   
+                    adddispatchesToTable(dispatches);   
+                }
+               
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+
+    }
+
+    
+    
+    
+    
+  
+    function getAllToyNamesAjax(){
+        console.log("result from gettallToysajax");
+        $.ajax({
+            // "url": "http://127.0.0.1:5000/toynames",
+            "url": host+"/toynames",
+            "method":"GET",
+            "data":"",
+            "dataType": "JSON",
+            "success":function(result){
+                
+                toynames = result;
+                addoptions(toynames);
+                },
+            
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+   
+
+    
+
+
+    function createdispatchesAjax(dispatches){
+        console.log("inside create dispatches AJAX", dispatches)
+        
+        $.ajax({
+            // "url": "http://127.0.0.1:5000/dispatches",
+            "url": host+"/dispatches",
+            "method":"POST",
+            "data":JSON.stringify(dispatches),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+                console.log("this is the result fififif", result)
+                
+                
+                console.log("This product was dispatched  and the dispatch_id is ", result);
+                dispatch_id = result;
+                console.log(dispatch_id)
+                updateToyQtyAjax(dispatch_id);
+                
+                // console.log(dispatches.product_id);
+                // alertwelldone();
+                // showWellDone();
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+
+    function updateToyQtyAjax(dispatch_id){
+        $.ajax({
+            // "url": "http://127.0.0.1:5000/stock/"+encodeURI(dispatch_id),
+            "url": host+"/stock/"+encodeURI(dispatch_id),
+            "method":"PUT",
+            "data":JSON.stringify(dispatch_id),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+                
+               console.log(result);
+                  
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+
+    
+
+    getAllDispatchesAjax();
+    </script>
+</html>
+
