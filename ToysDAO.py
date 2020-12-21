@@ -3,14 +3,18 @@ import dbconfig as cfg
 
 class ToysDAO:
     db=""
-    def __init__(self):
-        self.db = mysql.connector.connect( 
-        host= cfg.mysql["host"],
-        user= cfg.mysql["user"],
-        password=cfg.mysql["password"],
-        database=cfg.mysql["database"]
+
+    def connectionToDB(self):
+        self.db = mysql.connector.connect(
+            host= cfg.mysql["host"],
+            user= cfg.mysql["user"],
+            password=cfg.mysql["password"],
+            database=cfg.mysql["database"]
 )
-        print("connection made Fiona")
+       
+
+    def __init__(self):
+        self.connectionToDB()
 
     def create(self, toys):
         cursor = self.db.cursor()
@@ -171,6 +175,7 @@ class ToysDAO:
         cursor.execute(sql, values) 
         self.db.commit()
         print("delete done for toy with ", id) 
+        cursor.close()
     
 
     def convertToDict(self, result):
