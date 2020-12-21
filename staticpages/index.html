@@ -120,7 +120,7 @@
 
 
         <h2>Toys</h2>
-        <div> <button id="showCreateButton" onclick="showCreate()">Create</button></div>
+        <div> <button id="showCreateButton" class="btn btn-secondary" onclick="showCreate()">Create A New Toy</button></div><br/>
         <div>
             <table class="table" id="toysTable">
                 <tr>
@@ -271,11 +271,11 @@
         var cell4 = rowElement.insertCell(5);
         cell4.innerHTML = toys.quantity
         var cell5 = rowElement.insertCell(6);
-        cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+        cell5.innerHTML = '<button class="btn btn-secondary" onclick="showUpdate(this)">Update</button>'
         var cell6 = rowElement.insertCell(7);
         if (toys.hasdispatches == "No"){
             console.log("no dipsatches so can delete", toys.hasdispatches);
-            cell6.innerHTML = '<button onclick="doDelete(this)">delete</button>'
+            cell6.innerHTML = '<button class="btn btn-danger" onclick="doDelete(this)">delete</button>'
         }
         else if (toys.hasdispatches != "No"){
             cell6.innerHTML = "Toy dispatched so toy cannot be deleted"
