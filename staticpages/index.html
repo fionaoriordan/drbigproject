@@ -14,6 +14,7 @@
         
             body {
                 margin: 0;
+                background-color:#a59eb8
             }
                 
             
@@ -45,16 +46,19 @@
                 color: black;
             }
             
-             /* h2 settings */
-             h1 {
+             /* h2 css settings */
+            h1 {
                 color:#f00c3a;
                 text-align: center;
+
             }
-            /* h2 settings */
+       
+              /* h2 css settings */
             h2 {
+                color: #4f1809;
                 text-align: center;
+
             }
-    
             /* Three unequal columns */
             .column {
                 float: left;
@@ -124,7 +128,7 @@
                         <th>Toy Maker</th>
                         <th>Model Number</th>
                         <th>Colour</th>
-                        <th>Quantity</th>
+                        <th>Quantity Available</th>
                         <th>Update</th>
                         <th>Delete</th>
                 </tr>
@@ -133,13 +137,13 @@
         </div>
         <div id='createUpdateForm' style="display: none">
                 <form>
-                <h2><span id="createLabel">Create </span> <span id="updateLabel">update</span>a toy</h2>
+                <h2><span id="createLabel">Create </span> <span id="updateLabel">Update </span>a toy</h2>
                 <input type="hidden" name="id"/>
                 Name <input type="text" name="name" required /><br/>
                 Maker <input type="text" name="maker" required/> <br/>
                 Model <input type="text" name="model" required/> <br/>
                 Colour <input type="text" name="colour"/> <br/>
-                quantity <input type="number" name="quantity" required/> <br/>
+                quantity <input type="number" name="quantity" min="0" max="100" required/> <br/>
                 <input type="hidden" name="hasdispatches"/><br/>
                
                 <input id="doCreateButton" type="submit" onclick="doCreate()"/>
@@ -198,8 +202,12 @@
         toys.colour = form.querySelector('input[name="colour"]').value
         toys.quantity = form.querySelector('input[name="quantity"]').value
         console.log(JSON.stringify(toys));
+        if (toys.quantity < 0){
+        alert("You cannot have enter a qty less than 1. Please try again");
+        }
+        else if (toys.quantity >= 0){
         createtoysAjax(toys);
-        
+        }
         
     }
 
@@ -207,11 +215,22 @@
         var toys = gettoysFromForm();
         console.log("toys from doupdate her fi: ",toys)
         var rowElement = document.getElementById(toys.id);
+        
+        var form = document.getElementById('createUpdateForm')
+        var toystest = {}
+        toystest.quantity = form.querySelector('input[name="quantity"]').value
+        if (toys.quantity < 0){
+        alert("You cannot have enter a qty less than 0. Please try again");
+        }
+        else if (toystest.quantity >= 0){
         updatetoysAjax(toys);
         settoysInRow(rowElement,toys);
        
         clearForm();
         showViewAll();
+        }
+        
+        
     }
     function goBack(){
        
