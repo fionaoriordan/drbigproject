@@ -16,6 +16,11 @@ class ToysDAO:
     def __init__(self):
         self.connectionToDB()
 
+    def getCursor(self):
+        if not self.db.is_connected():
+            self.connectionToDB()
+            return self.db.cursor()
+
     def create(self, toys):
         cursor = self.db.cursor()
         sql="insert into toys (name, maker, model, colour, quantity) values (%s,%s,%s,%s,%s)" 
