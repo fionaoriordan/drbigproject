@@ -1,11 +1,13 @@
 
 # drbigproject  
-GMIT Higher Diploma Data Analytics  
-Data Representation Module 52954  
-Assignment: DR Big Project 
+
+GMIT Higher Diploma Data Analytics    
+Data Representation Module 52957  
+Assignment: DR Big Project  
 Lecturer: Andrew Beatty  
-Student: Fiona O'Riordan
-Due Date: 29 December 2020  
+Student: Fiona O'Riordan  
+Due Date: 29 December 2020    
+
 ---
 ## Purpose  
 
