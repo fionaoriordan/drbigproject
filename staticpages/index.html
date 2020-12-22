@@ -200,7 +200,7 @@
         toys.quantity = form.querySelector('input[name="quantity"]').value
         console.log(JSON.stringify(toys));
         if (toys.quantity < 0){
-        alert("You cannot have enter a qty less than 1. Please try again");
+        alert("You cannot have enter a qty less than 0. Please try again");
         }
         else if (toys.quantity >= 0){
         createtoysAjax(toys);
@@ -317,7 +317,6 @@
     function populateFormWithtoys(toys){
         var form = document.getElementById('createUpdateForm')
         form.querySelector('input[name="id"]').disabled = true
-        form.querySelector('input[name="name"]').readOnly = true;
         form.querySelector('input[name="id"]').value  = toys.id
         console.log("insidepopulate form fi", toys);
         if (toys.hasdispatches == "Yes"){
